@@ -1,7 +1,12 @@
 import { ponder } from "ponder:registry";
 import schema from "ponder:schema";
 
+import { queue } from "./queue"
+
 ponder.on("ERC721:Transfer", async ({ event, context }) => {
+  const { client } = context;
+  const { ERC721 } = context.contracts;
+
   // Create an Account for the sender, or update the balance if it already exists.
   await context.db
     .insert(schema.account)
@@ -21,6 +26,8 @@ ponder.on("ERC721:Transfer", async ({ event, context }) => {
       owner: event.args.to,
     })
     .onConflictDoUpdate({ owner: event.args.to });
+
+  await queue.add("fetch-metadata", { tokenId: Number(event.args.id) }, { jobId: `fetch-metadata-${Number(event.args.id)}` })
 
   // Create a TransferEvent.
   await context.db.insert(schema.transferEvent).values({
