@@ -4,7 +4,7 @@ This example shows how to build a fullstack backend using Ponder with support fo
 
 ## Quirks
 
-By default Ponder doesn't export CommonJS and Drizzle Kit can't be run in ESM mode (as explained in [this longstanding issue](https://github.com/drizzle-team/drizzle-orm/issues/819#issuecomment-1927814518)). This causes all Drizzle Kit commands to fail when importing tables or column types from Ponder. As a sketchy workaround, this example [patches](https://github.com/jaydenwindle/ponder-fullstack/blob/070a1fa68bc26019b76970427c3201b4bf06df9d/patches/ponder.patch) Ponder to export it's ESM bundle as a CommonJS bundle like so. Since the CommonJS import is only used inside Drizzle Kit commands this seems to work fine.
+By default Ponder doesn't export CommonJS and Drizzle Kit can't be run in ESM mode (as explained in [this longstanding issue](https://github.com/drizzle-team/drizzle-orm/issues/819#issuecomment-1927814518)). This causes all Drizzle Kit commands to fail when importing tables or column types from Ponder. As a sketchy workaround, this example [patches](https://github.com/jaydenwindle/ponder-fullstack/blob/070a1fa68bc26019b76970427c3201b4bf06df9d/patches/ponder.patch) Ponder to export it's ESM bundle as a CommonJS bundle. Since the CommonJS import is only used inside Drizzle Kit commands this seems to work fine.
 
 It is also important that the `drizzle-orm` version installed is the same as the one used by Ponder (otherwise you will run into type issues).
 
