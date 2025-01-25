@@ -1,4 +1,4 @@
-# Example Fullstack API
+# Example Ponder Fullstack API
 
 This example shows how to build a fullstack backend using Ponder with support for offchain database tables and background tasks. It builds on Ponder's [ERC721 indexing example](https://github.com/ponder-sh/ponder/tree/main/examples/reference-erc721) which uses the Smol Brains NFT contract on Arbitrum ([Link](https://arbiscan.io/address/0x6325439389E0797Ab35752B4F43a14C004f22A9c)).
 
