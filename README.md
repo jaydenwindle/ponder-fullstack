@@ -1,35 +1,10 @@
-# Example ERC721 token API
+# Example Fullstack API
 
-This example shows how to create a GraphQL API for an ERC721 token using Ponder. It uses the Smol Brains NFT contract on Arbitrum ([Link](https://arbiscan.io/address/0x6325439389E0797Ab35752B4F43a14C004f22A9c)).
+This example shows how to build a fullstack backend using Ponder with support for offchain database tables and background tasks. It builds on Ponder's [ERC721 indexing example](https://github.com/ponder-sh/ponder/tree/main/examples/reference-erc721) which uses the Smol Brains NFT contract on Arbitrum ([Link](https://arbiscan.io/address/0x6325439389E0797Ab35752B4F43a14C004f22A9c)).
 
-## Sample queries
+## Quirks
 
-### Get all tokens currently owned by an account
+By default Ponder doesn't export CommonJS but Drizzle Kit can't be run in ESM mode (as explained in [this longstanding issue](https://github.com/drizzle-team/drizzle-orm/issues/819#issuecomment-1927814518)). As a sketchy workaround, this example patches Ponder to export it's ESM bundle as a CommonJS bundle like so. Since the CommonJS import is only used inside Drizzle Kit commands this seems to work fine.
 
-```graphql
-{
-  account(id: "0x2B8E4729672613D69e5006a97dD56A455389FB2b") {
-    id
-    tokens {
-      id
-    }
-  }
-}
-```
+It is also important that the `drizzle-orm` version installed is the same as the one used by Ponder (otherwise you will run into type issues).
 
-### Get the current owner and all transfer events for a token
-
-```graphql
-{
-  token(id: "7777") {
-    owner {
-      id
-    }
-    transferEvents {
-      from
-      to
-      timestamp
-    }
-  }
-}
-```
