@@ -7,6 +7,7 @@ import { arbitrum } from 'viem/chains'
 import config from "../../ponder.config"
 import { db } from "../db"
 import { metadata as metadataTable } from "../db/offchain.schema"
+import { eq } from 'drizzle-orm';
 
 const publicClient = createPublicClient({
   chain: arbitrum,

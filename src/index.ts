@@ -3,6 +3,10 @@ import schema from "ponder:schema";
 
 import { queue } from "./queue"
 
+import { db } from "./db"
+import { metadata as metadataTable } from "./db/offchain.schema"
+import { eq } from 'drizzle-orm';
+
 ponder.on("ERC721:Transfer", async ({ event, context }) => {
   const { client } = context;
   const { ERC721 } = context.contracts;
@@ -27,7 +31,13 @@ ponder.on("ERC721:Transfer", async ({ event, context }) => {
     })
     .onConflictDoUpdate({ owner: event.args.to });
 
-  await queue.add("fetch-metadata", { tokenId: Number(event.args.id) }, { jobId: `fetch-metadata-${Number(event.args.id)}` })
+  const existingMetadata = await db.query.metadata.findFirst({
+    where: eq(metadataTable.tokenId, event.args.id)
+  })
+
+  if (!existingMetadata) {
+    await queue.add("fetch-metadata", { tokenId: Number(event.args.id) })
+  }
 
   // Create a TransferEvent.
   await context.db.insert(schema.transferEvent).values({
